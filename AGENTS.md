@@ -29,7 +29,7 @@ system changes go through a small privileged helper started with `pkexec`.
 | `pyproject.toml` | Package metadata, version read from `powerctl.core.VERSION`, `powercontrol` console script |
 | `.github/workflows/ci.yml` | Tests in a Fedora container; on `main` re-renders screenshots when the version changed |
 | `.github/workflows/release.yml` | Only on a `release/*` tag (`release/X.Y.Z`): runs CI, checks tag == version, builds, smoke-tests and publishes a GitHub release |
-| `docs/screenshots/` | Generated PNGs (light and dark) plus a `VERSION` stamp. Do not edit by hand |
+| `docs/screenshots/` | Generated PNGs in `light/` and `dark/` plus a `VERSION` stamp. The README shows the dark ones. Do not edit by hand |
 
 ## Commands
 

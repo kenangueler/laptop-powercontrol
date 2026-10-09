@@ -36,7 +36,7 @@ chmod 777 "$TMP"
 
 if [ "$LOCAL" = 1 ]; then
     "$ROOT/tests/run_gui_tests.sh" --screenshots "$TMP"
-    if command -v pngquant >/dev/null; then pngquant --force --ext .png --skip-if-larger --quality 80-95 "$TMP"/*.png || true; fi
+    if command -v pngquant >/dev/null; then pngquant --force --ext .png --skip-if-larger --quality 80-95 "$TMP"/*/*.png || true; fi
 else
     ENGINE="$(command -v podman || command -v docker || true)"
     [ -n "$ENGINE" ] || { echo "Neither podman nor docker found, use --local" >&2; exit 2; }
@@ -45,12 +45,12 @@ else
         dnf -y -q install $PACKAGES >/dev/null 2>&1 || { echo \"dnf install failed\" >&2; exit 1; }
         cp -r /src /work
         /work/scripts/screenshots.sh --local >/dev/null
-        cp /work/docs/screenshots/* /out/
-        chmod a+rw /out/*"
+        cp -r /work/docs/screenshots/. /out/
+        chmod -R a+rwX /out"
 fi
 
 [ -s "$TMP/VERSION" ] || { echo "Rendering failed" >&2; exit 1; }
 rm -rf "$OUT"
 mkdir -p "$OUT"
-cp "$TMP"/* "$OUT/"
+cp -r "$TMP"/. "$OUT/"
 echo "Rendered $(find "$OUT" -name "*.png" | wc -l) screenshots for $VERSION into docs/screenshots ($(du -sh "$OUT" | cut -f1))"

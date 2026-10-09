@@ -3,7 +3,7 @@
 Run through tests/run_gui_tests.sh, which starts a private headless mutter compositor:
 
     tests/run_gui_tests.sh                       # functional test
-    tests/run_gui_tests.sh --screenshots DIR     # also write PNGs of every page (light + dark)
+    tests/run_gui_tests.sh --screenshots DIR     # also write DIR/light/*.png and DIR/dark/*.png
 """
 import ctypes
 import math
@@ -50,17 +50,17 @@ def _ptr(o):
     return ctypes.pythonapi.PyCapsule_GetPointer(o.__gpointer__, None)
 
 
-def screenshot(win, name):
+def screenshot(win, name, scheme):
     if not SHOTS:
         return
-    os.makedirs(SHOTS, exist_ok=True)
+    os.makedirs(os.path.join(SHOTS, scheme), exist_ok=True)
     with open(os.path.join(SHOTS, "VERSION"), "w") as f:  # lets CI regenerate screenshots once per version
         f.write(core.VERSION + "\n")
     s = Gtk.Snapshot()
     Gtk.WidgetPaintable.new(win).snapshot(s, win.get_width(), win.get_height())
     node = _gtk.gtk_snapshot_to_node(_ptr(s))
     tex = _gtk.gsk_renderer_render_texture(_ptr(win.get_renderer()), node, None)
-    _gtk.gdk_texture_save_to_png(tex, os.path.join(SHOTS, f"{name}.png").encode())
+    _gtk.gdk_texture_save_to_png(tex, os.path.join(SHOTS, scheme, f"{name}.png").encode())
 
 
 # ---------------------------------------------------------------- helpers
@@ -210,7 +210,7 @@ def scenario(app):
             out.append(lambda sc=scheme: Adw.StyleManager.get_default().set_color_scheme(sc))
             for page in ("overview", "settings", "profiles", "battery", "system"):
                 out.append(lambda p=page: (win.stack.set_visible_child_name(p), 800)[1])
-                out.append(lambda p=page, d=dark: screenshot(win, f"{p}{'-dark' if d else ''}"))
+                out.append(lambda p=page, d=dark: screenshot(win, p, "dark" if d else "light"))
         return out
 
     def t_reset_all():

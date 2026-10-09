@@ -4,7 +4,7 @@ A GTK 4 / libadwaita app for tuning Linux laptop power settings separately for *
 **on battery**. It sits on top of [TLP](https://linrunner.de/tlp/), so whatever you set keeps working
 after a reboot and switches automatically when you plug in or unplug.
 
-![Power Settings](docs/screenshots/settings.png)
+![Power Settings](docs/screenshots/dark/settings.png)
 
 ## What it does
 
@@ -23,9 +23,9 @@ Only settings your hardware supports are shown.
 
 | Overview | Profiles | Battery |
 |---|---|---|
-| ![Overview](docs/screenshots/overview.png) | ![Profiles](docs/screenshots/profiles.png) | ![Battery](docs/screenshots/battery.png) |
+| ![Overview](docs/screenshots/dark/overview.png) | ![Profiles](docs/screenshots/dark/profiles.png) | ![Battery](docs/screenshots/dark/battery.png) |
 
-Dark mode versions are in [docs/screenshots](docs/screenshots). The screenshots are rendered by CI from
+Light mode versions are in [docs/screenshots/light](docs/screenshots/light). The screenshots are rendered by CI from
 a simulated test machine and refreshed automatically whenever the version number changes.
 
 ## Requirements
