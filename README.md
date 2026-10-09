@@ -25,9 +25,6 @@ Only settings your hardware supports are shown.
 |---|---|---|
 | ![Overview](docs/screenshots/dark/overview.png) | ![Profiles](docs/screenshots/dark/profiles.png) | ![Battery](docs/screenshots/dark/battery.png) |
 
-Light mode versions are in [docs/screenshots/light](docs/screenshots/light). The screenshots are rendered by CI from
-a simulated test machine and refreshed automatically whenever the version number changes.
-
 ## Requirements
 
 | | Fedora / RHEL | Debian / Ubuntu | Arch |

@@ -138,5 +138,6 @@ checksums. The .deb targets Ubuntu 24.04+ / Debian 13+ (libadwaita 1.5). Keep it
 
 ## Commits
 
-Short imperative subject (max 72 chars), optional body explaining why. Example:
-`Add per-source Intel GPU frequency limits`.
+[Conventional Commits](https://www.conventionalcommits.org): `<type>(<scope>): <description>`, short and
+imperative. Types: `feat`, `fix`, `docs`, `test`, `ci`, `build`, `refactor`, `chore`. Scope is optional.
+Example: `feat(settings): add Intel GPU frequency limits`.
