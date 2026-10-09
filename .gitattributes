@@ -1,0 +1,14 @@
+# Normalise line endings; scripts and config files must stay LF (shebangs, TLP, polkit).
+* text=auto eol=lf
+
+*.py      text eol=lf diff=python
+*.sh      text eol=lf
+*.md      text eol=lf diff=markdown
+*.desktop text eol=lf
+*.policy  text eol=lf
+*.json    text eol=lf
+
+*.png     binary
+*.svg     text eol=lf
+*.toml    text eol=lf
+*.yml     text eol=lf

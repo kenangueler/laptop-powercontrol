@@ -1,0 +1,33 @@
+[Desktop Entry]
+Type=Application
+Name=Laptop Power Control
+GenericName=Power Management
+Comment=Tune CPU, platform, device and battery settings for AC and battery power
+Exec=powercontrol
+Icon=com.kenangueler.apps.LaptopPowerControl
+Terminal=false
+Categories=Settings;HardwareSettings;
+Keywords=power;battery;tlp;cpu;turbo;governor;profile;charge;threshold;
+StartupNotify=true
+StartupWMClass=com.kenangueler.apps.LaptopPowerControl
+Actions=balanced;performance;maximum;saver;quiet;
+
+[Desktop Action balanced]
+Name=Apply Balanced Profile
+Exec=powercontrol --profile Balanced
+
+[Desktop Action performance]
+Name=Apply Performance Profile
+Exec=powercontrol --profile Performance
+
+[Desktop Action maximum]
+Name=Apply Maximum Profile
+Exec=powercontrol --profile Maximum
+
+[Desktop Action saver]
+Name=Apply Battery Saver Profile
+Exec=powercontrol --profile Battery Saver
+
+[Desktop Action quiet]
+Name=Apply Quiet Profile
+Exec=powercontrol --profile Quiet

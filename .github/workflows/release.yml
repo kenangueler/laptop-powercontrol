@@ -1,0 +1,42 @@
+name: Release
+
+# Releases are only published for tags named release/X.Y.Z (matching core.VERSION). Such a tag
+# produces a GitHub release with the source tarball, a .deb and an AppImage. Other tags do nothing.
+on:
+  push:
+    tags: ["release/*"]
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    needs: test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check that the tag matches the version
+        run: |
+          version=$(python3 -c 'from powerctl.core import VERSION; print(VERSION)')
+          if [ "$GITHUB_REF_NAME" != "release/$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match core.VERSION, expected release/$version"
+            exit 1
+          fi
+      - name: Build
+        run: scripts/build-release.sh
+      - name: Smoke test
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ./dist/*.deb
+          powercontrol --version
+          appimage=$(ls dist/*.AppImage)
+          "$appimage" --appimage-extract-and-run --version
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes \
+            --title "Laptop Power Control ${GITHUB_REF_NAME#release/}"

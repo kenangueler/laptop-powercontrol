@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Test / tooling artefacts
+.pytest_cache/
+.coverage
+htmlcov/
+/tmp/
+*.tmp
+*.bak
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Local agent state
+.opencode/
+.claude/
+
+# Release artifacts
+dist/

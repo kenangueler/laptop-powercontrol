@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  DEPS: >-
+    git python3-gobject gtk4 libadwaita mutter dbus-daemon mesa-dri-drivers
+    adwaita-icon-theme adwaita-sans-fonts desktop-file-utils libxml2 pngquant
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - name: Install dependencies
+        run: echo "$DEPS" | xargs dnf -y -q install
+      - uses: actions/checkout@v4
+      - name: Static checks
+        run: |
+          python3 -m py_compile powercontrol.py powerctl/*.py tests/*.py
+          desktop-file-validate data/*.desktop
+          xmllint --noout data/*.policy data/*.svg
+          bash -n install.sh tests/run_gui_tests.sh scripts/*.sh
+      - name: Unit and helper tests
+        run: python3 -m unittest discover -s tests -v
+      - name: GUI tests (headless)
+        run: tests/run_gui_tests.sh
+
+  # docs/screenshots/VERSION records the version the screenshots were made for. When core.VERSION
+  # changes, the screenshots are rendered again and committed, replacing the old ones.
+  screenshots:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    permissions:
+      contents: write
+    steps:
+      - name: Install dependencies
+        run: echo "$DEPS" | xargs dnf -y -q install
+      - uses: actions/checkout@v4
+      - name: Render screenshots if the version changed
+        run: scripts/screenshots.sh --local --if-changed
+      - name: Commit
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git add docs/screenshots
+          git diff --cached --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update screenshots for $(cat docs/screenshots/VERSION)"
+          git push
